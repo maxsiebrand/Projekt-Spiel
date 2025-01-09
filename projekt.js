@@ -38,5 +38,11 @@ function main(){
     }
 }
 
+function drawPac(){
+    pac.forEach()
+}
+
+
+
 const packmanboard = document.getElementById("packmanboard");
 const packmanboard_ctx = packmanboard.getContext("2d");
