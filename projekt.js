@@ -34,3 +34,29 @@ function main(){
 
 const packmanboard = document.getElementById("packmanboard");
 const packmanboard_ctx = packmanboard.getContext("2d");
+
+let mauerteile=[
+    {x:150, y: 100},
+    {x:160, y: 100},
+    {x:170, y: 100},
+    {x:180, y: 100},
+    {x:190, y: 100},
+    {x:200, y: 100},
+    {x:210, y: 100},
+    {x:220, y: 100}
+]
+
+function drawMauer(){
+    mauerteile.forEach(drawMauerPart)
+}
+
+
+function drawMauerPart(mauerteile) {
+
+    snakeboard_ctx.fillStyle = mauer_col;
+    snakeboard_ctx.strokestyle = mauer_border;
+    snakeboard_ctx.fillRect(mauerteile.x, mauerteile.y, 10, 10);
+    snakeboard_ctx.strokeRect(mauerteile.x, mauerteile.y, 10, 10);
+}
+
+
