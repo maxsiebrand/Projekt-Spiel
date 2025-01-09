@@ -27,8 +27,14 @@ document.addEventListener("keydown",richtung_aendern);
 function main(){
     if (spiel_endet()){
         richtung_aendern = false;
-        setTimeout(function (tick()
-        ))
+        setTimeout(function (ontick){
+            clearfeld();
+            drawpunkte();
+            beweg_pac();
+            drawPac();
+            main();
+            drawMauer();
+        }, 100)
     }
 }
 
