@@ -71,4 +71,105 @@ function drawMauerPart(mauerteile) {
     snakeboard_ctx.strokeRect(mauerteile.x, mauerteile.y, 10, 10);
 }
 
+Pacman.MAP = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 4, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 4, 0],
+    [0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0],
+    [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0],
+    [2, 2, 2, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 2, 2, 2],
+    [0, 0, 0, 0, 1, 0, 1, 0, 0, 3, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+    [2, 2, 2, 2, 1, 1, 1, 0, 3, 3, 3, 0, 1, 1, 1, 2, 2, 2, 2],
+    [0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+    [2, 2, 2, 0, 1, 0, 1, 1, 1, 2, 1, 1, 1, 0, 1, 0, 2, 2, 2],
+    [0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0],
+    [0, 4, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 4, 0],
+    [0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0],
+    [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
 
+Pacman.Map = function (size) {
+
+    var height    = null,
+        width     = null,
+        blockSize = size,
+        pillSize  = 0,
+        map       = null;
+
+    function withinBounds(y, x) {
+        return y >= 0 && y < height && x >= 0 && x < width;
+    }
+
+    function isWall(pos) {
+        return withinBounds(pos.y, pos.x) && map[pos.y][pos.x] === Pacman.WALL;
+    }
+
+    function isFloorSpace(pos) {
+        if (!withinBounds(pos.y, pos.x)) {
+            return false;
+        }
+        var peice = map[pos.y][pos.x];
+        return peice === Pacman.EMPTY ||
+            peice === Pacman.BISCUIT ||
+            peice === Pacman.PILL;
+    }
+    }
+
+function draw(ctx) {
+
+    var s     = map.blockSize,
+        angle = calcAngle(direction, position);
+
+    ctx.fillStyle = "#FFFF00";
+
+    ctx.beginPath();
+
+    ctx.moveTo(((position.x/10) * s) + s / 2,
+        ((position.y/10) * s) + s / 2);
+
+    ctx.arc(((position.x/10) * s) + s / 2,
+        ((position.y/10) * s) + s / 2,
+        s / 2, Math.PI * angle.start,
+        Math.PI * angle.end, angle.direction);
+
+    ctx.fill();
+}
+
+function drawWall(ctx) {
+
+    var i, j, p, line;
+
+    ctx.strokeStyle = "#0000FF";
+    ctx.lineWidth   = 5;
+    ctx.lineCap     = "round";
+
+    for (i = 0; i < Pacman.WALLS.length; i += 1) {
+        line = Pacman.WALLS[i];
+        ctx.beginPath();
+
+        for (j = 0; j < line.length; j += 1) {
+
+            p = line[j];
+
+            if (p.move) {
+                ctx.moveTo(p.move[0] * blockSize, p.move[1] * blockSize);
+            } else if (p.line) {
+                ctx.lineTo(p.line[0] * blockSize, p.line[1] * blockSize);
+            } else if (p.curve) {
+                ctx.quadraticCurveTo(p.curve[0] * blockSize,
+                    p.curve[1] * blockSize,
+                    p.curve[2] * blockSize,
+                    p.curve[3] * blockSize);
+            }
+        }
+        ctx.stroke();
+    }
+}
