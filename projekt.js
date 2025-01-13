@@ -172,4 +172,4 @@ function drawWall(ctx) {
         }
         ctx.stroke();
     }
-}
+    }
