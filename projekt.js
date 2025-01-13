@@ -1,7 +1,7 @@
 const board_border = "black"
 const board_background = "blue"
 const pac_col = "yellow"
-const pac_border
+const pac_border = "yellow"
 
 let pac = [
     {x: 200, y:100}
