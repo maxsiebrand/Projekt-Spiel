@@ -173,3 +173,53 @@ function drawWall(ctx) {
         ctx.stroke();
     }
     }
+function Karte(Farbe, Ziffer, Bild, Spezialeffekt){
+    this.farbe = Farbe
+    this.ziffer = Ziffer
+    this.bild = Bild
+    this.spezialEffekt = Spezialeffekt
+}
+
+const spielfeldArray = [
+    ["X", "X", "X", "X", "X"],
+    ["X", "P", "X", "G", "X"],
+    ["X", "X", "X", "X", "X"]];
+
+var spielfeld = "";
+
+
+function ladeSpielfeld(){
+    for (y of spielfeldArray){
+        for (x of y){
+            spielfeld += x;
+        }
+        spielfeld += "<br>";
+    }
+}
+
+//document.getElementById("output").innerHTML = spielfeldArray[1][1];
+//document.getElementById("output").innerHTML = früchte;
+ladeSpielfeld();
+document.getElementById("spielfeld").innerHTML = spielfeld;
+
+
+
+function Spielfigur(bild, positionX, positionY){
+    this.bild = bild;
+    this.positionX = positionX;
+    this.positionY = positionY;
+}
+
+Pacman = new Spielfigur("P",1,1);
+
+
+
+function bewegePacmanOben(){
+    spielfeldArray[Pacman.positionY][Pacman.positionX] = "X";
+    Pacman.positionY--;
+    Pacman.positionX;
+    spielfeldArray[Pacman.positionY][Pacman.positionX] = "P";
+    spielfeld = "";
+    ladeSpielfeld();
+    document.getElementById("spielfeld").innerHTML = spielfeld;
+}
