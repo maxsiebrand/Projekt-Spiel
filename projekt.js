@@ -39,8 +39,16 @@ function main(){
 }
 
 function drawPac(){
-    pac.forEach()
+    pac.forEach(function(pacmanPart) {
+        board_ctx.fillStyle = pac_col;
+        board_ctx.strokeStyle = pac_border;
+        board_ctx.beginPath();
+        board_ctx.arc(pacmanPart.x, pacmanPart.y, 10, 0, Math.PI * 2, true);
+        board_ctx.fill();
+        board_ctx.stroke();
+    });
 }
+
 
 
 
@@ -123,7 +131,7 @@ Pacman.Map = function (size) {
     }
     }
 
-function draw(ctx) {
+//function draw(ctx) {
 
     var s     = map.blockSize,
         angle = calcAngle(direction, position);
@@ -141,9 +149,8 @@ function draw(ctx) {
         Math.PI * angle.end, angle.direction);
 
     ctx.fill();
-}
 
-function drawWall(ctx) {
+//function drawWall(ctx) {
 
     var i, j, p, line;
 
@@ -172,8 +179,8 @@ function drawWall(ctx) {
         }
         ctx.stroke();
     }
-    }
-function Karte(Farbe, Ziffer, Bild, Spezialeffekt){
+
+function Karte (Farbe, Ziffer, Bild, Spezialeffekt){
     this.farbe = Farbe
     this.ziffer = Ziffer
     this.bild = Bild
