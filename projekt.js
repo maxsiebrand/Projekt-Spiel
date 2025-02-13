@@ -21,7 +21,7 @@ const pacboard = document.getElementById("pacboard");
 
 main()
 
-document.addEventListener("keydown",richtung_aendern);
+document.addEventListener("keydown",changedirection);
 
 
 function main(){
@@ -165,8 +165,6 @@ function ladeSpielfeld(){
 ladeSpielfeld();
 document.getElementById("spielfeld").innerHTML = spielfeld;
 
-
-
 function Spielfigur(bild, positionX, positionY){
     this.bild = bild;
     this.positionX = positionX;
@@ -174,8 +172,6 @@ function Spielfigur(bild, positionX, positionY){
 }
 
 Pacman = new Spielfigur("P",1,1);
-
-
 
 function bewegePacmanOben(){
     spielfeldArray[Pacman.positionY][Pacman.positionX] = "X";
@@ -187,3 +183,35 @@ function bewegePacmanOben(){
     document.getElementById("spielfeld").innerHTML = spielfeld;
 }
 }
+
+function changedirection(event) {
+    const LEFT_KEY = 37;
+    const RIGHT_KEY = 39;
+    const UP_KEY = 38;
+    const DOWN_KEY = 40;
+
+    if (richtung_aendern) return;
+    richtung_aendern = true;
+    const keyPressed = event.keyCode;
+    const goingUp = (dy === -10);
+    const goingDown = (dy === 10);
+    const goingRight = (dx === 10);
+    const goingLeft = (dx === -10);
+    if (keyPressed === LEFT_KEY && !goingRight) {
+        dx = -10;
+        dy = 0;
+    }
+    if (keyPressed === UP_KEY && !goingDown) {
+        dx = 0;
+        dy = -10;
+    }
+    if (keyPressed === RIGHT_KEY && !goingLeft) {
+        dx = 10;
+        dy = 0;
+    }
+    if (keyPressed === DOWN_KEY && !goingUp) {
+        dx = 0;
+        dy = 10;
+    }
+}
+
