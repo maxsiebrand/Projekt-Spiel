@@ -26,6 +26,11 @@ function drawPacman() {
     ctx.closePath()
 }
 
+function update() {
+    pacman.x += pacman.dx
+    pacman.y += pacman.dy
+}
+
 function SpielSchleife() {
     ctx.clearRect(0,0,canvas.width, canvas.height);
     drawPacman();
@@ -33,6 +38,13 @@ function SpielSchleife() {
     requestAnimationFrame(SpielSchleife); //Wiederholen
 }
 SpielSchleife() //Spiel starten
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") { pacman.dx = pacman.speed; pacman.dy = 0; }
+    if (event.key === "ArrowLeft") {pacman.dx = -pacman.speed; pacman.dy = 0; }
+    if (event.key === "ArrowUp") {pacman.dy = -pacman.speed; pacman.dx = 0; }
+    if (event.key === "ArrowDown") { pacman.dy = pacman.speed; pacman.dx = 0; }
+});
 
 
 
