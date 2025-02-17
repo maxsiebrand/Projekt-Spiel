@@ -1,11 +1,41 @@
-const board_border = "black"
-const board_background = "blue"
-const pac_col = "yellow"
-const pac_border = "yellow"
+//Spielfeld holen
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d")
 
-let pac = [
-    {x: 200, y:100}
-]
+//pac Variable
+let pacman = {
+    x: 50, y:50, //Startposi
+    radius: 5,
+    speed: 5,
+    dx: 0, dy: 0
+};
+
+let food ={
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: 5,
+
+};
+
+function drawPacman() {
+    ctx.beginPath();
+    ctx.arc(pacman.x, pacman.y, pacman.radius, 0.2 * Math.PI, 1.8 * Math.PI); //Pac Form
+    ctx.lineTo(pacman.x, pacman.y);
+    ctx.fillStyle = "yellow";
+    ctx.fill();
+    ctx.closePath()
+}
+
+function SpielSchleife() {
+    ctx.clearRect(0,0,canvas.width, canvas.height);
+    drawPacman();
+    update();
+    requestAnimationFrame(SpielSchleife); //Wiederholen
+}
+SpielSchleife() //Spiel starten
+
+
+
 
 let score = 0
 // True if changing direction

@@ -1,52 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=devive-width, initial-scale=1.0">
     <title>Pac-Man</title>
-    <link rel="stylesheet" href="projekt.css">
-</head>
-
-
-<body>
-    <p id="score"> Score=0 </p>
-    <canvas id="pacboard" width="400" height="400"></canvas>
-
-    <script src="projekt.js"></script>
-    <style type="text/css">
-        body {
+    <style>
+        canvas {
+            border: 2px solid black;
             background-color: black;
         }
-
-        #pacman {
-            height: 470px;
-            width: 382px;
-            border-radius: 5px;
-            margin: 20px auto;
-        }
-
-        #shim {
-            font-family: 'Permanent Marker', cursive;
-            position: absolute;
-            visibility: hidden
-        }
-
-        h1 {
-            font-family: 'Permanent Marker', cursive;
-            text-align: center;
-            color: yellow;
-        }
-
-        body {
-            width: 342px;
-            margin: 0px auto;
-            font-family: sans-serif;
-        }
-
-        p {
-            text-decoration: none;
-            color: #0000FF;
-        }
     </style>
+</head>
+<body>
+   <canvas id="gameCanvas" width="500" height="500"></canvas>
+    <script src="projekt.js"></script>
 </body>
 </html>
 
