@@ -11,8 +11,8 @@ let pacman = {
 };
 
 const tileSize = 40; // Größe jedes Blocks in Pixeln
-const rows = 15;
-const cols = 15;
+const rows = map.length;;
+const cols = map[0].length;;
 canvas.width = cols * tileSize;
 canvas.height = rows * tileSize;
 
@@ -96,17 +96,22 @@ const map = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ];
 
-// Funktion zum Zeichnen der Karte
 function drawMap() {
+    console.log("Map wird gezeichnet...");
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
             if (map[row][col] === 1) {
                 ctx.fillStyle = "blue";
-                ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+            } else {
+                ctx.fillStyle = "black";
             }
+            ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+            ctx.strokeStyle = "white";
+            ctx.strokeRect(col * tileSize, row * tileSize, tileSize, tileSize);
         }
     }
 }
+
 
 
 
