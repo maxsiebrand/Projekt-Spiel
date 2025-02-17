@@ -10,6 +10,12 @@ let pacman = {
     dx: 0, dy: 0
 };
 
+const tileSize = 40; // Größe jedes Blocks in Pixeln
+const rows = 15;
+const cols = 15;
+canvas.width = cols * tileSize;
+canvas.height = rows * tileSize;
+
 let food ={
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
@@ -26,242 +32,81 @@ function drawPacman() {
     ctx.closePath()
 }
 
+// Kollisionsprüfung für Mauern
+function canMove(x, y) {
+    let col = Math.floor(x / tileSize);
+    let row = Math.floor(y / tileSize);
+    return map[row][col] === 0;
+}
+
+
+// Update-Funktion
 function update() {
-    pacman.x += pacman.dx
-    pacman.y += pacman.dy
+    let newX = pacman.x + pacman.dx;
+    let newY = pacman.y + pacman.dy;
+
+    if (canMove(newX, pacman.y)) {
+        pacman.x = newX;
+    }
+    if (canMove(pacman.x, newY)) {
+        pacman.y = newY;
+    }
 }
 
 function SpielSchleife() {
     ctx.clearRect(0,0,canvas.width, canvas.height);
     drawPacman();
+    drawMap();
     update();
     requestAnimationFrame(SpielSchleife); //Wiederholen
 }
 SpielSchleife() //Spiel starten
 
 document.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowRight") { pacman.dx = pacman.speed; pacman.dy = 0; }
-    if (event.key === "ArrowLeft") {pacman.dx = -pacman.speed; pacman.dy = 0; }
-    if (event.key === "ArrowUp") {pacman.dy = -pacman.speed; pacman.dx = 0; }
-    if (event.key === "ArrowDown") { pacman.dy = pacman.speed; pacman.dx = 0; }
+    if (event.key === "ArrowRight" && canMove(pacman.x + pacman.speed, pacman.y)) {
+        pacman.dx = pacman.speed; pacman.dy = 0;
+    }
+    if (event.key === "ArrowLeft" && canMove(pacman.x - pacman.speed, pacman.y)) {
+        pacman.dx = -pacman.speed; pacman.dy = 0;
+    }
+    if (event.key === "ArrowUp" && canMove(pacman.x, pacman.y - pacman.speed)) {
+        pacman.dy = -pacman.speed; pacman.dx = 0;
+    }
+    if (event.key === "ArrowDown" && canMove(pacman.x, pacman.y + pacman.speed)) {
+        pacman.dy = pacman.speed; pacman.dx = 0;
+    }
 });
 
 
-
-
-let score = 0
-// True if changing direction
-let richtung_aendern = false;
-let punkte_x;
-let punkt_y;
-let dx = 10;
-let dy = 0;
-
-const board = document.getElementById("board");
-const board_ctx = board.getContext("2d")
-
-gen_punkte()
-main()
-
-document.addEventListener("keydown",richtung_aendern);
-
-
-function main(){
-    if (spiel_endet()){
-        richtung_aendern = false;
-        setTimeout(function (ontick){
-            clearfeld();
-            drawpunkte();
-            beweg_pac();
-            drawPac();
-            main();
-            drawMauer();
-        }, 100)
-    }
-}
-
-function drawPac(){
-    pac.forEach()
-}
-
-
-
-const packmanboard = document.getElementById("packmanboard");
-const packmanboard_ctx = packmanboard.getContext("2d");
-
-let mauerteile=[
-    {x:150, y: 100},
-    {x:160, y: 100},
-    {x:170, y: 100},
-    {x:180, y: 100},
-    {x:190, y: 100},
-    {x:200, y: 100},
-    {x:210, y: 100},
-    {x:220, y: 100}
-]
-
-function drawMauer(){
-    mauerteile.forEach(drawMauerPart)
-}
-
-
-function drawMauerPart(mauerteile) {
-
-    snakeboard_ctx.fillStyle = mauer_col;
-    snakeboard_ctx.strokestyle = mauer_border;
-    snakeboard_ctx.fillRect(mauerteile.x, mauerteile.y, 10, 10);
-    snakeboard_ctx.strokeRect(mauerteile.x, mauerteile.y, 10, 10);
-}
-
-Pacman.MAP = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 4, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 4, 0],
-    [0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0],
-    [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-    [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0],
-    [2, 2, 2, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 2, 2, 2],
-    [0, 0, 0, 0, 1, 0, 1, 0, 0, 3, 0, 0, 1, 0, 1, 0, 0, 0, 0],
-    [2, 2, 2, 2, 1, 1, 1, 0, 3, 3, 3, 0, 1, 1, 1, 2, 2, 2, 2],
-    [0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
-    [2, 2, 2, 0, 1, 0, 1, 1, 1, 2, 1, 1, 1, 0, 1, 0, 2, 2, 2],
-    [0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0],
-    [0, 4, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 4, 0],
-    [0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0],
-    [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-    [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+const map = [
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,0,0,0,1,0,0,0,0,0,0,1,0,0,1],
+    [1,0,1,0,1,0,1,1,1,1,0,1,0,1,1],
+    [1,0,1,0,0,0,1,0,0,1,0,1,0,0,1],
+    [1,0,1,1,1,0,1,0,1,1,0,1,1,0,1],
+    [1,0,0,0,1,0,0,0,0,0,0,1,0,0,1],
+    [1,1,1,0,1,1,1,1,1,1,0,1,0,1,1],
+    [1,0,1,0,0,0,0,0,0,1,0,0,0,0,1],
+    [1,0,1,1,1,1,1,1,0,1,1,1,1,0,1],
+    [1,0,0,0,1,0,0,1,0,0,0,0,1,0,1],
+    [1,1,1,0,1,0,1,1,1,1,1,0,1,1,1],
+    [1,0,1,0,1,0,0,0,0,0,1,0,0,0,1],
+    [1,0,1,0,1,1,1,1,1,0,1,1,1,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ];
 
-Pacman.Map = function (size) {
-
-    var height    = null,
-        width     = null,
-        blockSize = size,
-        pillSize  = 0,
-        map       = null;
-
-    function withinBounds(y, x) {
-        return y >= 0 && y < height && x >= 0 && x < width;
-    }
-
-    function isWall(pos) {
-        return withinBounds(pos.y, pos.x) && map[pos.y][pos.x] === Pacman.WALL;
-    }
-
-    function isFloorSpace(pos) {
-        if (!withinBounds(pos.y, pos.x)) {
-            return false;
-        }
-        var peice = map[pos.y][pos.x];
-        return peice === Pacman.EMPTY ||
-            peice === Pacman.BISCUIT ||
-            peice === Pacman.PILL;
-    }
-    }
-
-function draw(ctx) {
-
-    var s     = map.blockSize,
-        angle = calcAngle(direction, position);
-
-    ctx.fillStyle = "#FFFF00";
-
-    ctx.beginPath();
-
-    ctx.moveTo(((position.x/10) * s) + s / 2,
-        ((position.y/10) * s) + s / 2);
-
-    ctx.arc(((position.x/10) * s) + s / 2,
-        ((position.y/10) * s) + s / 2,
-        s / 2, Math.PI * angle.start,
-        Math.PI * angle.end, angle.direction);
-
-    ctx.fill();
-}
-
-function drawWall(ctx) {
-
-    var i, j, p, line;
-
-    ctx.strokeStyle = "#0000FF";
-    ctx.lineWidth   = 5;
-    ctx.lineCap     = "round";
-
-    for (i = 0; i < Pacman.WALLS.length; i += 1) {
-        line = Pacman.WALLS[i];
-        ctx.beginPath();
-
-        for (j = 0; j < line.length; j += 1) {
-
-            p = line[j];
-
-            if (p.move) {
-                ctx.moveTo(p.move[0] * blockSize, p.move[1] * blockSize);
-            } else if (p.line) {
-                ctx.lineTo(p.line[0] * blockSize, p.line[1] * blockSize);
-            } else if (p.curve) {
-                ctx.quadraticCurveTo(p.curve[0] * blockSize,
-                    p.curve[1] * blockSize,
-                    p.curve[2] * blockSize,
-                    p.curve[3] * blockSize);
+// Funktion zum Zeichnen der Karte
+function drawMap() {
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            if (map[row][col] === 1) {
+                ctx.fillStyle = "blue";
+                ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
             }
         }
-        ctx.stroke();
-    }
-    }
-function Karte(Farbe, Ziffer, Bild, Spezialeffekt){
-    this.farbe = Farbe
-    this.ziffer = Ziffer
-    this.bild = Bild
-    this.spezialEffekt = Spezialeffekt
-}
-
-const spielfeldArray = [
-    ["X", "X", "X", "X", "X"],
-    ["X", "P", "X", "G", "X"],
-    ["X", "X", "X", "X", "X"]];
-
-var spielfeld = "";
-
-
-function ladeSpielfeld(){
-    for (y of spielfeldArray){
-        for (x of y){
-            spielfeld += x;
-        }
-        spielfeld += "<br>";
     }
 }
 
-//document.getElementById("output").innerHTML = spielfeldArray[1][1];
-//document.getElementById("output").innerHTML = früchte;
-ladeSpielfeld();
-document.getElementById("spielfeld").innerHTML = spielfeld;
 
 
-
-function Spielfigur(bild, positionX, positionY){
-    this.bild = bild;
-    this.positionX = positionX;
-    this.positionY = positionY;
-}
-
-Pacman = new Spielfigur("P",1,1);
-
-
-
-function bewegePacmanOben(){
-    spielfeldArray[Pacman.positionY][Pacman.positionX] = "X";
-    Pacman.positionY--;
-    Pacman.positionX;
-    spielfeldArray[Pacman.positionY][Pacman.positionX] = "P";
-    spielfeld = "";
-    ladeSpielfeld();
-    document.getElementById("spielfeld").innerHTML = spielfeld;
-}
