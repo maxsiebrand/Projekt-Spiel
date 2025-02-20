@@ -58,7 +58,7 @@ function drawPacman() {
 function canMove(x, y) {
     let col = Math.floor(x / tileSize);
     let row = Math.floor(y / tileSize);
-    return map[row][col] === 0;
+    return map[row] && map[row][col] === 0;
 }
 
 
@@ -77,8 +77,8 @@ function update() {
 
 function SpielSchleife() {
     ctx.clearRect(0,0,canvas.width, canvas.height);
-    drawPacman();
     drawMap();
+    drawPacman();
     update();
     requestAnimationFrame(SpielSchleife); //Wiederholen
 }
