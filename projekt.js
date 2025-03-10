@@ -34,7 +34,7 @@ let pacman = {
     x: tileSize + tileSize / 2,
     y: tileSize + tileSize / 2,
     radius: 10,
-    speed: 5,
+    speed: 1.5,
     dx: 0, dy: 0
 };
 
@@ -116,6 +116,7 @@ function drawMap() {
         }
     }
 }
+
 
 startButton.addEventListener("click", () => {
     startScreen.style.display = "none";
