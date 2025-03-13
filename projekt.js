@@ -38,13 +38,20 @@ let pacman = {
     dx: 0, dy: 0
 };
 
+let points = [];
 
-let food ={
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    radius: 5,
-
-};
+for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+        if (map[row][col] === 0) {
+            points.push({
+                x: col * tileSize + tileSize / 2,
+                y: row * tileSize + tileSize / 2,
+                radius: 5,
+                collected: false
+            });
+        }
+    }
+}
 
 function drawPacman() {
     ctx.beginPath();
