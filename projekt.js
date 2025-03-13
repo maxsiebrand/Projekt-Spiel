@@ -62,6 +62,31 @@ function drawPacman() {
     ctx.closePath()
 }
 
+function drawPoints() {
+    ctx.fillStyle = "white";
+    points.forEach(point => {
+        if (!point.collected) {
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.closePath();
+        }
+    });
+}
+
+function checkPointCollision() {
+    points.forEach(point => {
+        if (!point.collected) {
+            let dx = pacman.x - point.x;
+            let dy = pacman.y - point.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < pacman.radius) {
+                point.collected = true;
+            }
+        }
+    });
+}
+
 // Kollisionsprüfung für Mauern
 function canMove(x, y) {
     let col = Math.floor(x / tileSize);
@@ -81,11 +106,13 @@ function update() {
     if (canMove(pacman.x, newY)) {
         pacman.y = newY;
     }
+    checkPointCollision()
 }
 
 function SpielSchleife() {
     ctx.clearRect(0,0,canvas.width, canvas.height);
     drawMap();
+    drawPoints()
     drawPacman();
     update();
     requestAnimationFrame(SpielSchleife); //Wiederholen
