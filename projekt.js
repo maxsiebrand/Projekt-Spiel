@@ -89,9 +89,15 @@ function checkPointCollision() {
 
 // Kollisionsprüfung für Mauern
 function canMove(x, y) {
-    let col = Math.floor(x / tileSize);
-    let row = Math.floor(y / tileSize);
-    return map[row] && map[row][col] === 0;
+    let leftCol = Math.floor((x - pacman.radius) / tileSize);
+    let rightCol = Math.floor((x + pacman.radius) / tileSize);
+    let topRow = Math.floor((y - pacman.radius) / tileSize);
+    let bottomRow = Math.floor((y + pacman.radius) / tileSize);
+
+    return (
+        map[topRow] && map[topRow][leftCol] === 0 && map[topRow][rightCol] === 0 &&
+        map[bottomRow] && map[bottomRow][leftCol] === 0 && map[bottomRow][rightCol] === 0
+    );
 }
 
 
