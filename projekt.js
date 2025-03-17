@@ -212,3 +212,19 @@ function showWinScreen() {
     // Neustart-Button-EventListener
     document.getElementById("restartButton").addEventListener("click", restartGame);
 }
+
+function restartGame() {
+    document.getElementById("winScreen").remove(); // Overlay entfernen
+
+    // Punkte zurücksetzen
+    points.forEach(point => point.collected = false);
+
+    // Pac-Man zurücksetzen
+    pacman.x = tileSize + tileSize / 2;
+    pacman.y = tileSize + tileSize / 2;
+    pacman.dx = 0;
+    pacman.dy = 0;
+
+    // Spiel neu starten
+    SpielSchleife();
+}
