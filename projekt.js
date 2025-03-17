@@ -24,8 +24,8 @@ const map = [
 ];
 
 const tileSize = 40; // Größe jedes Blocks in Pixeln
-const rows = map.length;;
-const cols = map[0].length;;
+const rows = map.length;
+const cols = map[0].length;
 canvas.width = cols * tileSize;
 canvas.height = rows * tileSize;
 
@@ -113,18 +113,27 @@ function update() {
         pacman.y = newY;
     }
     checkPointCollision()
+    checkCollisionWithGhosts();
+    moveGeister();
 }
+
+startButton.addEventListener("click", () => {
+    startScreen.style.display = "none";
+    canvas.style.display = "block";
+    SpielSchleife();
+});
 
 function SpielSchleife() {
     ctx.clearRect(0,0,canvas.width, canvas.height);
     drawMap();
     drawPoints()
     drawPacman();
+    drawGeister();
     update();
     checkWinCondition()
     requestAnimationFrame(SpielSchleife); //Wiederholen
 }
-SpielSchleife() //Spiel starten
+
 
 document.addEventListener("keydown", (event) => {
     if (event.key === "ArrowRight" && canMove(pacman.x + pacman.speed, pacman.y)) {
@@ -159,11 +168,6 @@ function drawMap() {
 }
 
 
-startButton.addEventListener("click", () => {
-    startScreen.style.display = "none";
-    canvas.style.display = "block";
-    SpielSchleife();
-});
 
 
 function checkWinCondition() {
@@ -211,4 +215,85 @@ function showWinScreen() {
 
     // Neustart-Button-EventListener
     document.getElementById("restartButton").addEventListener("click", restartGame);
+}
+// Funktion, um eine zufällige gültige Position für Geister zu finden
+function findValidSpawn() {
+    let validPositions = [];
+
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            if (map[row][col] === 0) {
+                validPositions.push({ x: col * tileSize + tileSize / 2, y: row * tileSize + tileSize / 2 });
+            }
+        }
+    }
+
+    // Wähle eine zufällige gültige Position
+    return validPositions[Math.floor(Math.random() * validPositions.length)];
+}
+
+// Geister-Objekte (starten jetzt an einer validen Position)
+let geister = [
+    { ...findValidSpawn(), radius: 15, speed: 0.8, dx: 0.8, dy: 0 },
+    { ...findValidSpawn(), radius: 15, speed: 0.8, dx: 0, dy: 0.8 }
+];
+
+// Funktion zum Zeichnen der Geister
+function drawGeister() {
+    geister.forEach(geist => {
+        ctx.beginPath();
+        ctx.arc(geist.x, geist.y, geist.radius, 0, Math.PI * 2); // Kreis für den Geist
+        ctx.fillStyle = "red"; // Geisterfarbe
+        ctx.fill();
+        ctx.closePath();
+    });
+}
+
+function moveGeister() {
+    geister.forEach(geist => {
+        let newX = geist.x + geist.dx;
+        let newY = geist.y + geist.dy;
+
+        // Wenn die neue Position eine Wand ist, Richtung ändern
+        if (!canMove(newX, geist.y) || !canMove(geist.x, newY)) {
+            let possibleDirections = [
+                { dx: geist.speed, dy: 0 },   // Rechts
+                { dx: -geist.speed, dy: 0 },  // Links
+                { dx: 0, dy: geist.speed },   // Unten
+                { dx: 0, dy: -geist.speed }   // Oben
+            ];
+
+            // Filtere gültige Bewegungen
+            let validDirections = possibleDirections.filter(dir => canMove(geist.x + dir.dx, geist.y + dir.dy));
+
+            // Falls keine gültige Richtung: Zurück zur vorherigen Position
+            if (validDirections.length === 0) {
+                geist.dx *= -1;
+                geist.dy *= -1;
+            } else {
+                // Wähle eine zufällige Richtung aus den gültigen
+                let newDirection = validDirections[Math.floor(Math.random() * validDirections.length)];
+                geist.dx = newDirection.dx;
+                geist.dy = newDirection.dy;
+            }
+        } else {
+            // Falls keine Kollision, Geist normal bewegen
+            geist.x = newX;
+            geist.y = newY;
+        }
+    });
+}
+
+// Kollisionsprüfung für Pac-Man mit Geistern
+function checkCollisionWithGhosts() {
+    for (let geist of geister) {
+        let dx = pacman.x - geist.x;
+        let dy = pacman.y - geist.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < pacman.radius + geist.radius) {
+            resetGame();
+            return;
+        }
+    }
 }
