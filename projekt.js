@@ -235,7 +235,9 @@ function findValidSpawn() {
 // Geister-Objekte (starten jetzt an einer validen Position)
 let geister = [
     { ...findValidSpawn(), radius: 15, speed: 0.8, dx: 0.8, dy: 0 },
-    { ...findValidSpawn(), radius: 15, speed: 0.8, dx: 0, dy: 0.8 }
+    { ...findValidSpawn(), radius: 15, speed: 0.8, dx: 0, dy: 0.8 },
+    { ...findValidSpawn(), radius: 15, speed: 0.8, dx: 0.8, dy: 0 },
+    { ...findValidSpawn(), radius: 15, speed: 0.8, dx: 0.8, dy: 0 },
 ];
 
 // Funktion zum Zeichnen der Geister
@@ -296,4 +298,26 @@ function checkCollisionWithGhosts() {
             return;
         }
     }
+}
+
+function resetGame() {
+    // Pac-Man auf Startposition zurücksetzen
+    pacman = {
+        x: tileSize + tileSize / 2,
+        y: tileSize + tileSize / 2,
+        radius: 10,
+        speed: 1.5,
+        dx: 0, dy: 0
+    };
+
+    // Punkte zurücksetzen
+    points.forEach(point => point.collected = false);
+
+    // Geister auf neue zufällige gültige Positionen setzen
+    geister = [
+        { ...findValidSpawn(), radius: 15, speed: 0.8, dx: 0.8, dy: 0 },
+        { ...findValidSpawn(), radius: 15, speed: 0.8, dx: 0.8, dy: 0 },
+        { ...findValidSpawn(), radius: 15, speed: 0.8, dx: 0.8, dy: 0 },
+        { ...findValidSpawn(), radius: 15, speed: 0.8, dx: 0, dy: 0.8 }
+    ];
 }
