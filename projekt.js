@@ -121,6 +121,7 @@ function SpielSchleife() {
     drawPoints()
     drawPacman();
     update();
+    checkWinCondition()
     requestAnimationFrame(SpielSchleife); //Wiederholen
 }
 SpielSchleife() //Spiel starten
@@ -169,4 +170,45 @@ function checkWinCondition() {
     if (points.every(point => point.collected)) {
         showWinScreen();
     }
+}
+
+function showWinScreen() {
+    // Spiel-Loop stoppen
+    cancelAnimationFrame(animationFrame);
+
+    // Overlay erstellen
+    let winScreen = document.createElement("div");
+    winScreen.id = "winScreen";
+    winScreen.style.position = "fixed";
+    winScreen.style.top = "0";
+    winScreen.style.left = "0";
+    winScreen.style.width = "100%";
+    winScreen.style.height = "100%";
+    winScreen.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+    winScreen.style.display = "flex";
+    winScreen.style.flexDirection = "column";
+    winScreen.style.alignItems = "center";
+    winScreen.style.justifyContent = "center";
+    winScreen.style.color = "white";
+    winScreen.style.fontSize = "36px";
+    winScreen.style.fontFamily = "Arial, sans-serif";
+
+    winScreen.innerHTML = `
+        <h1>Sehr gut! Du hast gewonnen! 🎉</h1>
+        <button id="restartButton" style="
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            background-color: yellow;
+            color: black;
+            border-radius: 10px;
+        ">Neustarten</button>
+    `;
+
+    document.body.appendChild(winScreen);
+
+    // Neustart-Button-EventListener
+    document.getElementById("restartButton").addEventListener("click", restartGame);
 }
