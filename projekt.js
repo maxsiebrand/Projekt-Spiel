@@ -163,3 +163,10 @@ startButton.addEventListener("click", () => {
     canvas.style.display = "block";
     SpielSchleife();
 });
+
+
+function checkWinCondition() {
+    if (points.every(point => point.collected)) {
+        showWinScreen();
+    }
+}
