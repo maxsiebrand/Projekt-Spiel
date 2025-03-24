@@ -82,6 +82,7 @@ function checkPointCollision() {
             let distance = Math.sqrt(dx * dx + dy * dy);
             if (distance < pacman.radius) {
                 point.collected = true;
+                score++; // Score erhöhen
             }
         }
     });
@@ -117,6 +118,16 @@ function update() {
     moveGeister();
 }
 
+let score = 0;
+const totalPoints = points.length; // Gesamte Punkteanzahl
+
+// Funktion zum Zeichnen des Scores
+function drawScore() {
+    ctx.fillStyle = "yellow";
+    ctx.font = "24px Arial";
+    ctx.fillText(`Score: ${score} / ${totalPoints}`, canvas.width - 160, 25);
+}
+
 startButton.addEventListener("click", () => {
     startScreen.style.display = "none";
     canvas.style.display = "block";
@@ -129,8 +140,9 @@ function SpielSchleife() {
     drawPoints()
     drawPacman();
     drawGeister();
+    drawScore();
     update();
-    checkWinCondition()
+    checkWinCondition();
     requestAnimationFrame(SpielSchleife); //Wiederholen
 }
 
@@ -176,46 +188,6 @@ function checkWinCondition() {
     }
 }
 
-function showWinScreen() {
-    // Spiel-Loop stoppen
-    cancelAnimationFrame(animationFrame);
-
-    // Overlay erstellen
-    let winScreen = document.createElement("div");
-    winScreen.id = "winScreen";
-    winScreen.style.position = "fixed";
-    winScreen.style.top = "0";
-    winScreen.style.left = "0";
-    winScreen.style.width = "100%";
-    winScreen.style.height = "100%";
-    winScreen.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-    winScreen.style.display = "flex";
-    winScreen.style.flexDirection = "column";
-    winScreen.style.alignItems = "center";
-    winScreen.style.justifyContent = "center";
-    winScreen.style.color = "white";
-    winScreen.style.fontSize = "36px";
-    winScreen.style.fontFamily = "Arial, sans-serif";
-
-    winScreen.innerHTML = `
-        <h1>Sehr gut! Du hast gewonnen! 🎉</h1>
-        <button id="restartButton" style="
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 20px;
-            border: none;
-            cursor: pointer;
-            background-color: yellow;
-            color: black;
-            border-radius: 10px;
-        ">Neustarten</button>
-    `;
-
-    document.body.appendChild(winScreen);
-
-    // Neustart-Button-EventListener
-    document.getElementById("restartButton").addEventListener("click", restartGame);
-}
 // Funktion, um eine zufällige gültige Position für Geister zu finden
 function findValidSpawn() {
     let validPositions = [];
@@ -312,6 +284,7 @@ function resetGame() {
 
     // Punkte zurücksetzen
     points.forEach(point => point.collected = false);
+    score = 0;
 
     // Geister auf neue zufällige gültige Positionen setzen
     geister = [
