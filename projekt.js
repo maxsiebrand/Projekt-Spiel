@@ -294,3 +294,29 @@ function resetGame() {
         { ...findValidSpawn(), radius: 15, speed: 0.8, dx: 0, dy: 0.8 }
     ];
 }
+
+
+function showWinScreen() {
+    // Spielfeld ausblenden
+    canvas.style.display = "none";
+
+    // Gewinnerscreen erstellen
+    let winScreen = document.createElement("div");
+    winScreen.innerHTML = "<h1>Glückwunsch! Du hast gewonnen! 🎉</h1><button onclick='restartGame()'>Neustart</button>";
+    winScreen.style.position = "absolute";
+    winScreen.style.top = "50%";
+    winScreen.style.left = "50%";
+    winScreen.style.transform = "translate(-50%, -50%)";
+    winScreen.style.background = "black";
+    winScreen.style.color = "yellow";
+    winScreen.style.padding = "20px";
+    winScreen.style.textAlign = "center";
+    winScreen.style.borderRadius = "10px";
+    document.body.appendChild(winScreen);
+}
+
+// Funktion zum Neustarten des Spiels
+function restartGame() {
+    location.reload(); // Seite neu laden, um das Spiel zurückzusetzen
+}
+
